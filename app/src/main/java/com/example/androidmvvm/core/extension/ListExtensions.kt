@@ -5,11 +5,8 @@ package com.example.androidmvvm.core.extension
  * @throws [NoSuchElementException] if the list is empty or just has an element
  */
 fun <T> List<T>.second(): T {
-    if (isEmpty()) {
-        throw NoSuchElementException("List is empty.")
-    }
     if (size < 2) {
-        throw NoSuchElementException("List just has an element")
+        throw NoSuchElementException(if (isEmpty()) "List is empty." else "List just has an element")
     }
     return this[1]
 }
@@ -19,8 +16,5 @@ fun <T> List<T>.second(): T {
  * @return null if the list is empty or just has an element
  */
 fun <T> List<T>.secondOrNull(): T? {
-    if (isEmpty() || size < 2) {
-        return null
-    }
-    return this[1]
+    return if (size >= 2) this[1] else null
 }
