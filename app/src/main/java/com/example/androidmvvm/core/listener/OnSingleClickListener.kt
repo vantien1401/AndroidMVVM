@@ -1,22 +1,19 @@
 package com.example.androidmvvm.core.listener
 
 import android.view.View
-import java.util.concurrent.atomic.AtomicBoolean
 
 class OnSingleClickListener(
     private val onClickListener: View.OnClickListener,
     private val intervalMs: Long = 250L
 ) : View.OnClickListener {
-    private val canClick = AtomicBoolean(true)
+    @Volatile
+    private var lastClickTime = 0L
 
     override fun onClick(view: View?) {
-        if (canClick.getAndSet(false)) {
-            view?.run {
-                postDelayed({
-                    canClick.set(true)
-                }, intervalMs)
-                onClickListener.onClick(view)
-            }
+        val now = System.currentTimeMillis()
+        if (now - lastClickTime >= intervalMs) {
+            lastClickTime = now
+            onClickListener.onClick(view)
         }
     }
 }

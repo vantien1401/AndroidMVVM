@@ -6,17 +6,20 @@ import androidx.appcompat.widget.AppCompatImageView
 import com.bumptech.glide.Glide
 
 fun AppCompatImageView.setImageUrl(url: String?, @DrawableRes placeholder: Int? = null) {
-    val placeholderDrawable = placeholder?.let {
-        AppCompatResources.getDrawable(context, placeholder)
+    // Skip loading if URL is null or empty to avoid unnecessary Glide calls
+    if (url.isNullOrEmpty()) {
+        placeholder?.let {
+            setImageDrawable(AppCompatResources.getDrawable(context, it))
+        }
+        return
     }
-    if (placeholderDrawable == null) {
-        Glide.with(context)
-            .load(url)
-            .into(this)
-    } else {
-        Glide.with(context)
-            .load(url)
-            .placeholder(placeholderDrawable)
-            .into(this)
-    }
+    
+    Glide.with(context)
+        .load(url)
+        .apply {
+            placeholder?.let {
+                placeholder(AppCompatResources.getDrawable(context, it))
+            }
+        }
+        .into(this)
 }

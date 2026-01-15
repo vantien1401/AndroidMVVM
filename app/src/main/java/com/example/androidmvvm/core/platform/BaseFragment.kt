@@ -39,14 +39,17 @@ abstract class BaseFragment<VB : ViewBinding, VM : ViewModel> : Fragment() {
     }
 
     private var loadingDialogFragment: LoadingDialogFragment? = null
+    
+    // Cache the class name to avoid repeated reflection calls
+    private val logTag by lazy { "${this::class.simpleName}" }
 
     override fun onAttach(context: Context) {
-        Timber.tag(LIFECYCLE_TAG).i("${this::class.simpleName} onAttach")
+        Timber.tag(LIFECYCLE_TAG).i("$logTag onAttach")
         super.onAttach(context)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        Timber.tag(LIFECYCLE_TAG).i("${this::class.simpleName} onCreate")
+        Timber.tag(LIFECYCLE_TAG).i("$logTag onCreate")
         super.onCreate(savedInstanceState)
         addBackPressedCallback()
         observeBaseViewModel()
@@ -72,50 +75,50 @@ abstract class BaseFragment<VB : ViewBinding, VM : ViewModel> : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        Timber.tag(LIFECYCLE_TAG).i("${this::class.simpleName} onCreateView")
+        Timber.tag(LIFECYCLE_TAG).i("$logTag onCreateView")
         viewBinding = onCreateViewBinding(inflater, container)
         return viewBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        Timber.tag(LIFECYCLE_TAG).i("${this::class.simpleName} onViewCreated")
+        Timber.tag(LIFECYCLE_TAG).i("$logTag onViewCreated")
         super.onViewCreated(view, savedInstanceState)
     }
 
     override fun onStart() {
-        Timber.tag(LIFECYCLE_TAG).i("${this::class.simpleName} onStart")
+        Timber.tag(LIFECYCLE_TAG).i("$logTag onStart")
         super.onStart()
 
         onBackPressedCallback.isEnabled = true
     }
 
     override fun onResume() {
-        Timber.tag(LIFECYCLE_TAG).i("${this::class.simpleName} onResume")
+        Timber.tag(LIFECYCLE_TAG).i("$logTag onResume")
         super.onResume()
     }
 
     override fun onPause() {
-        Timber.tag(LIFECYCLE_TAG).i("${this::class.simpleName} onPause")
+        Timber.tag(LIFECYCLE_TAG).i("$logTag onPause")
         super.onPause()
     }
 
     override fun onStop() {
-        Timber.tag(LIFECYCLE_TAG).i("${this::class.simpleName} onStop")
+        Timber.tag(LIFECYCLE_TAG).i("$logTag onStop")
         super.onStop()
     }
 
     override fun onDestroyView() {
-        Timber.tag(LIFECYCLE_TAG).i("${this::class.simpleName} onDestroyView")
+        Timber.tag(LIFECYCLE_TAG).i("$logTag onDestroyView")
         super.onDestroyView()
     }
 
     override fun onDestroy() {
-        Timber.tag(LIFECYCLE_TAG).i("${this::class.simpleName} onDestroy")
+        Timber.tag(LIFECYCLE_TAG).i("$logTag onDestroy")
         super.onDestroy()
     }
 
     override fun onDetach() {
-        Timber.tag(LIFECYCLE_TAG).i("${this::class.simpleName} onDetach")
+        Timber.tag(LIFECYCLE_TAG).i("$logTag onDetach")
         super.onDetach()
     }
 

@@ -1,5 +1,6 @@
 package com.example.androidmvvm.feature.main.list
 
+import android.os.Bundle
 import androidx.recyclerview.widget.DiffUtil
 import com.example.androidmvvm.feature.main.model.RepoItem
 
@@ -10,5 +11,35 @@ class RepoDiffCallback : DiffUtil.ItemCallback<RepoItem>() {
 
     override fun areContentsTheSame(oldItem: RepoItem, newItem: RepoItem): Boolean {
         return oldItem == newItem
+    }
+
+    override fun getChangePayload(oldItem: RepoItem, newItem: RepoItem): Any? {
+        // Check for changes first to avoid unnecessary Bundle allocation
+        val hasRepoNameChanged = oldItem.repoName != newItem.repoName
+        val hasOwnerNameChanged = oldItem.ownerName != newItem.ownerName
+        val hasImageUrlChanged = oldItem.imageUrl != newItem.imageUrl
+        
+        if (!hasRepoNameChanged && !hasOwnerNameChanged && !hasImageUrlChanged) {
+            return null
+        }
+        
+        val bundle = Bundle()
+        if (hasRepoNameChanged) {
+            bundle.putString(PAYLOAD_REPO_NAME, newItem.repoName)
+        }
+        if (hasOwnerNameChanged) {
+            bundle.putString(PAYLOAD_OWNER_NAME, newItem.ownerName)
+        }
+        if (hasImageUrlChanged) {
+            bundle.putString(PAYLOAD_IMAGE_URL, newItem.imageUrl)
+        }
+        
+        return bundle
+    }
+
+    companion object {
+        const val PAYLOAD_REPO_NAME = "repo_name"
+        const val PAYLOAD_OWNER_NAME = "owner_name"
+        const val PAYLOAD_IMAGE_URL = "image_url"
     }
 }
