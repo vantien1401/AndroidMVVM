@@ -14,19 +14,27 @@ class RepoDiffCallback : DiffUtil.ItemCallback<RepoItem>() {
     }
 
     override fun getChangePayload(oldItem: RepoItem, newItem: RepoItem): Any? {
-        val bundle = Bundle()
+        // Check for changes first to avoid unnecessary Bundle allocation
+        val hasRepoNameChanged = oldItem.repoName != newItem.repoName
+        val hasOwnerNameChanged = oldItem.ownerName != newItem.ownerName
+        val hasImageUrlChanged = oldItem.imageUrl != newItem.imageUrl
         
-        if (oldItem.repoName != newItem.repoName) {
+        if (!hasRepoNameChanged && !hasOwnerNameChanged && !hasImageUrlChanged) {
+            return null
+        }
+        
+        val bundle = Bundle()
+        if (hasRepoNameChanged) {
             bundle.putString(PAYLOAD_REPO_NAME, newItem.repoName)
         }
-        if (oldItem.ownerName != newItem.ownerName) {
+        if (hasOwnerNameChanged) {
             bundle.putString(PAYLOAD_OWNER_NAME, newItem.ownerName)
         }
-        if (oldItem.imageUrl != newItem.imageUrl) {
+        if (hasImageUrlChanged) {
             bundle.putString(PAYLOAD_IMAGE_URL, newItem.imageUrl)
         }
         
-        return if (bundle.isEmpty) null else bundle
+        return bundle
     }
 
     companion object {
