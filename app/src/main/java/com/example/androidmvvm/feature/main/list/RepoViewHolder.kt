@@ -21,7 +21,7 @@ class RepoViewHolder(
 
     override fun onBind(item: RepoItem, payloads: List<Any>) {
         if (payloads.isEmpty()) {
-            onBind(item)
+            super.onBind(item, payloads)
             return
         }
 
