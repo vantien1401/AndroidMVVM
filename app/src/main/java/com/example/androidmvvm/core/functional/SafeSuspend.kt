@@ -9,13 +9,10 @@ suspend fun <R> safeSuspend(
 ): ResultWrapper<R> = try {
     action()
 } catch (exception: Exception) {
-    failureHandlers.forEach { failureHandler ->
-        val failure = failureHandler.handleThrowable(exception)
-        if (failure != null) {
-            return ResultWrapper.Error(failure)
-        }
-    }
-    ResultWrapper.Error(DefaultFailure(exception))
+    val failure = failureHandlers.firstNotNullOfOrNull { handler ->
+        handler.handleThrowable(exception)
+    } ?: DefaultFailure(exception)
+    ResultWrapper.Error(failure)
 }
 
 suspend fun <R> safeSuspendIgnoreFailure(
